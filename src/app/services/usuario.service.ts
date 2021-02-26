@@ -12,7 +12,7 @@ export class UsuarioService {
 
   getUsers(){
     
-    return this.http.get(`${this.URL}/users?per_page=6`)
+    return this.http.get(`${this.URL}/users?delay=3`)
                 .pipe( 
                   map( res => res['data'] )
                 );
