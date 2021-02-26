@@ -3,25 +3,25 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, map, mergeMap, take } from "rxjs/operators";
 import { UsuarioService } from "src/app/services/usuario.service";
-import * as usuariosActions from "../actions/usuarios.actions";
+import * as usuarioActions from "../actions/usuario.action";
 
 @Injectable()
-export class UsuariosEffects {
+export class UsuarioEffects {
 
     constructor(
         private actions$ : Actions,  //Observable que escucha las acciones
         private usuarioService: UsuarioService
     ){}
 
-    cargarUsuarios$ = createEffect(
+    cargarUsuario$ = createEffect(
         () => this.actions$
                     .pipe(  // Ponemos en marcha el escuchador de acciones!!
-                        ofType( usuariosActions.cargarUsuarios ), // Le indicamos la accion que queremos escuchar
+                        ofType( usuarioActions.cargarUsuario ), // Le indicamos la accion que queremos escuchar
                         mergeMap(                                               //Llamamos al metodo del servicio que queremos ejecutar
-                            () => this.usuarioService.getUsers()
+                            ( action ) => this.usuarioService.getUser( action.id )
                                         .pipe(
-                                            map( users => usuariosActions.cargarUsuariosSuccess({usuarios: users})),
-                                            catchError( (err) => of(usuariosActions.cargarUsuariosError({payload: err})))
+                                            map( user => usuarioActions.cargarUsuarioSuccess({usuario: user})),
+                                            catchError( (err) => of(usuarioActions.cargarUsuarioError({payload: err})))
                                         )
                         )
                     )
